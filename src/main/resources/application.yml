@@ -1,0 +1,19 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  endpoint:
+    readyness:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health, readiness
+
+postgres:
+  enabled: ${ENABLE_POSTGRES:false}
+  host: ${POSTGRES_HOST:localhost}
+  port: ${POSTGRES_PORT:5432}
+  db: ${POSTGRES_DB:postgres_demo}
+  user: ${POSTGRES_USER:postgres}
+  password: ${POSTGRES_PASSWORD:pass}
