@@ -1,7 +1,8 @@
 package de.contract.endpoint;
 
 import de.contract.data.repository.ContractRepository;
-import de.contract.model.Contract;
+import de.contract.model.AbstractContract;
+import de.contract.model.insurance.InsuranceContract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,54 +24,37 @@ public class ContractRestController {
 
     @GetMapping
     @ResponseBody
-    public List<Contract> getAll() {
+    public List<AbstractContract> getAll() {
         return contractRepository.findAll();
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Contract> getById(@PathVariable String id) {
+    public ResponseEntity<AbstractContract> getById(@PathVariable String id) {
         return contractRepository.findById(UUID.fromString(id))
-            .map(contract ->
-                new ResponseEntity<>(contract, HttpStatus.OK)
+            .map(abstractContract ->
+                new ResponseEntity<>(abstractContract, HttpStatus.OK)
             )
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<Contract> create(@RequestBody Contract contract) {
-        if(contract.getId() == null) {
-            contract.setId(UUID.randomUUID());
-            contractRepository.save(contract);
-            return new ResponseEntity<>(contract, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<AbstractContract> create(@RequestBody AbstractContract abstractContract) {
+        contractRepository.save(abstractContract);
+        return new ResponseEntity<>(abstractContract, HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity update(@PathVariable String id, @RequestBody Contract contract) {
-        if(contract.getId() != null) {
-            return contractRepository.findById(UUID.fromString(id))
-                .map(foundContract -> {
-                    foundContract.setLastname(contract.getLastname());
-                    foundContract.setFirstname(contract.getFirstname());
-                    foundContract.setPremium(contract.getPremium());
-                    foundContract.setType(contract.getType());
-                    contractRepository.save(foundContract);
-                    return new ResponseEntity(HttpStatus.OK);
-                })
-                .orElse(
-                    new ResponseEntity<>(HttpStatus.NOT_FOUND)
-                );
-        }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity update(@PathVariable String id, @RequestBody InsuranceContract insuranceContract) {
+    //TODO Upsert?
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity delete(@PathVariable String id) {
         return contractRepository.findById(UUID.fromString(id))
             .map(
-                foundContract -> {
+                    foundContract -> {
                     contractRepository.delete(foundContract);
                     return new ResponseEntity(HttpStatus.OK);
                 })

@@ -11,9 +11,8 @@ management:
         include: health, readiness
 
 postgres:
-  enabled: ${ENABLE_POSTGRES:false}
   host: ${POSTGRES_HOST:localhost}
   port: ${POSTGRES_PORT:5432}
-  db: ${POSTGRES_DB:postgres_demo}
+  db: ${POSTGRES_DB:postgres}
   user: ${POSTGRES_USER:postgres}
-  password: ${POSTGRES_PASSWORD:pass}
+  password: ${POSTGRES_PASSWORD:example}
