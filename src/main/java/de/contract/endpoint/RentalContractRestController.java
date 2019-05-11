@@ -1,8 +1,8 @@
 package de.contract.endpoint;
 
-import de.contract.data.repository.ContractRepository;
-import de.contract.model.AbstractContract;
+import de.contract.data.repository.RentalContractRepository;
 import de.contract.model.insurance.InsuranceContract;
+import de.contract.model.rental.RentalContract;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,36 +12,36 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/contract")
-public class ContractRestController {
+@RequestMapping("/api/contract/rental")
+public class RentalContractRestController {
 
-    private final ContractRepository contractRepository;
+    private final RentalContractRepository rentalContractRepository;
 
     @Autowired
-    ContractRestController(ContractRepository contractRepository) {
-        this.contractRepository = contractRepository;
+    RentalContractRestController(RentalContractRepository rentalContractRepository) {
+        this.rentalContractRepository = rentalContractRepository;
     }
 
     @GetMapping
     @ResponseBody
-    public List<AbstractContract> getAll() {
-        return contractRepository.findAll();
+    public List<RentalContract> getAll() {
+        return rentalContractRepository.findAll();
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<AbstractContract> getById(@PathVariable String id) {
-        return contractRepository.findById(UUID.fromString(id))
-            .map(abstractContract ->
-                new ResponseEntity<>(abstractContract, HttpStatus.OK)
+    public ResponseEntity<RentalContract> getById(@PathVariable String id) {
+        return rentalContractRepository.findById(UUID.fromString(id))
+            .map(rentalContract ->
+                new ResponseEntity<>(rentalContract, HttpStatus.OK)
             )
             .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping
     @ResponseBody
-    public ResponseEntity<AbstractContract> create(@RequestBody AbstractContract abstractContract) {
-        contractRepository.save(abstractContract);
-        return new ResponseEntity<>(abstractContract, HttpStatus.OK);
+    public ResponseEntity<RentalContract> create(@RequestBody RentalContract rentalContract) {
+        rentalContractRepository.save(rentalContract);
+        return new ResponseEntity<>(rentalContract, HttpStatus.OK);
     }
 
     @PutMapping(value = "/{id}")
@@ -52,10 +52,10 @@ public class ContractRestController {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity delete(@PathVariable String id) {
-        return contractRepository.findById(UUID.fromString(id))
+        return rentalContractRepository.findById(UUID.fromString(id))
             .map(
                     foundContract -> {
-                    contractRepository.delete(foundContract);
+                    rentalContractRepository.delete(foundContract);
                     return new ResponseEntity(HttpStatus.OK);
                 })
             .orElse(

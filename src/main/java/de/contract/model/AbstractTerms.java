@@ -1,8 +1,9 @@
 package de.contract.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class AbstractTerms {
+public class AbstractTerms implements Serializable {
 
     protected LocalDate duration;
 

@@ -2,7 +2,9 @@ package de.contract.model.client;
 
 import de.contract.model.address.Address;
 
-public class Client {
+import java.io.Serializable;
+
+public class Client implements Serializable {
     private Address address;
     private String firstname;
     private String lastname;
